@@ -70,10 +70,17 @@
                     <span>Hubungi</span>
                 </a>
 
-                <a href="{{ route('login') }}"
-                   class="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
-                    Masuk
-                </a>
+                @if (Auth::check())
+                    <p
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
+                        {{ Auth::user()->name }}
+                    </p>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
+                        Masuk
+                    </a>
+                @endif
             </nav>
 
             <button id="mobile-menu-button" class="md:hidden text-gray-900 focus:outline-none transition">
