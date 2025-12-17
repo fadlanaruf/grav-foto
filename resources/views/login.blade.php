@@ -65,6 +65,10 @@
                 <input id="email" name="email" type="email" required
                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/50 backdrop-blur 
                        shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition">
+                
+                @error('email')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Password -->
@@ -73,6 +77,10 @@
                 <input id="password" name="password" type="password" required
                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/50 backdrop-blur 
                        shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition">
+
+                @error('password')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Remember + Forgot -->
