@@ -71,10 +71,21 @@
                 </a>
 
                 @if (Auth::check())
-                    <p
-                        class="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
-                        {{ Auth::user()->name }}
-                    </p>
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('reservations.index') }}"
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition">
+                            Riwayat Reservasi
+                        </a>
+                        <p class="px-4 py-2 bg-indigo-600 text-white rounded-xl">
+                            {{ Auth::user()->name }}
+                        </p>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
                 @else
                     <a href="{{ route('login') }}"
                         class="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
@@ -150,11 +161,12 @@
                     class="w-full text-gray-900 font-medium border-none focus:ring-0 p-0"/>
             </div>
             
-            <button class="mt-3 md:mt-0 w-full md:w-auto p-4 bg-indigo-600 text-white rounded-xl md:rounded-l-none md:rounded-r-xl hover:bg-indigo-700 transition flex items-center justify-center">
+            <a href="{{ Auth::check() ? route('reservations.create') : route('login') }}" 
+               class="mt-3 md:mt-0 w-full md:w-auto p-4 bg-indigo-600 text-white rounded-xl md:rounded-l-none md:rounded-r-xl hover:bg-indigo-700 transition flex items-center justify-center">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                 </svg>
-            </button>
+            </a>
         </div>
     </div>
 </section>
@@ -165,15 +177,23 @@
         <p class="text-gray-600 mb-6">Masukkan ID Reservasi Anda untuk melihat status pemesanan, jadwal, dan progres edit foto.</p>
 
         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 bg-white p-2 rounded-xl shadow-lg border border-gray-200">
-            <div class="flex-1">
-                <input type="text" placeholder="Contoh: GS-20251215-001" 
-                       class="w-full px-4 py-3 border-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg text-gray-700 font-medium"
-                       aria-label="Masukkan ID Reservasi">
-            </div>
-            <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition font-semibold shrink-0">
-                Cek Status
-            </button>
+            <form action="{{ route('reservations.track') }}" method="POST" class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full">
+                @csrf
+                <div class="flex-1">
+                    <input type="text" name="code" placeholder="Contoh: GS-20251215-001" 
+                           class="w-full px-4 py-3 border-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg text-gray-700 font-medium"
+                           aria-label="Masukkan ID Reservasi" required>
+                </div>
+                <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition font-semibold shrink-0">
+                    Cek Status
+                </button>
+            </form>
         </div>
+        @if(session('error'))
+            <div class="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
     </div>
 </section>
 
