@@ -30,6 +30,7 @@
 </div>
                 
                 <div class="flex items-center gap-6">
+                    @auth
                     <div class="hidden md:flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-2xl border border-gray-100">
                         <div class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xs font-bold uppercase">
                             {{ substr(Auth::user()->name, 0, 1) }}
@@ -44,6 +45,7 @@
                             </svg>
                         </button>
                     </form>
+                    @endauth
                 </div>
             </div>
         </header>
@@ -96,10 +98,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13.488 12.83a4 4 0 11-2.976 0" />
                             </svg>
                         </div>
-                        <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest pt-1">Pengguna</span>
+                        <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest pt-1">Klien</span>
                     </div>
-                    <h3 class="text-4xl font-black text-gray-900 leading-none">{{ $stats['total_users'] }}</h3>
-                    <p class="text-xs text-gray-500 mt-2 font-medium">Pelanggan terdaftar</p>
+                    <h3 class="text-4xl font-black text-gray-900 leading-none">{{ $stats['total_klien'] }}</h3>
+                    <p class="text-xs text-gray-500 mt-2 font-medium">Klien terdaftar</p>
                 </div>
             </div>
 
@@ -108,7 +110,7 @@
                     <div class="w-1.5 h-8 bg-indigo-600 rounded-full"></div>
                     <h2 class="text-2xl font-black text-gray-900 tracking-tight">Navigasi Utama</h2>
                 </div>
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
                     <a href="{{ route('admin.reservations.index') }}" class="group bg-white p-6 rounded-3xl border border-gray-100 hover:border-indigo-600 transition-all duration-300 flex flex-col items-center text-center shadow-sm hover:shadow-lg">
                         <div class="w-16 h-16 bg-indigo-50 text-3xl rounded-2xl flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:scale-110 transition-all">📅</div>
                         <span class="font-bold text-gray-900">Reservasi</span>
@@ -118,6 +120,11 @@
                         <div class="w-16 h-16 bg-purple-50 text-3xl rounded-2xl flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:scale-110 transition-all">📦</div>
                         <span class="font-bold text-gray-900">Paket Foto</span>
                         <span class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-tighter">Update Layanan</span>
+                    </a>
+                    <a href="{{ route('admin.users.index') }}" class="group bg-white p-6 rounded-3xl border border-gray-100 hover:border-green-600 transition-all duration-300 flex flex-col items-center text-center shadow-sm hover:shadow-lg">
+                        <div class="w-16 h-16 bg-green-50 text-3xl rounded-2xl flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:scale-110 transition-all">👥</div>
+                        <span class="font-bold text-gray-900">Klien</span>
+                        <span class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-tighter">Kelola Akun</span>
                     </a>
                     <a href="{{ route('admin.statuses.index') }}" class="group bg-white p-6 rounded-3xl border border-gray-100 hover:border-blue-600 transition-all duration-300 flex flex-col items-center text-center shadow-sm hover:shadow-lg">
                         <div class="w-16 h-16 bg-blue-50 text-3xl rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:scale-110 transition-all">🏷️</div>

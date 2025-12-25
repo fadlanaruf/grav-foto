@@ -41,7 +41,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('reservations.store') }}" method="POST" class="space-y-8">
+                <form action="{{ route('reservations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                     @csrf
 
                     <div class="space-y-2">
@@ -51,7 +51,7 @@
                                     class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all outline-none font-bold text-sm text-gray-700 appearance-none">
                                 <option value="">— Cari Paket Foto —</option>
                                 @foreach($packages as $package)
-                                    <option value="{{ $package->id }}" {{ old('photo_package_id') == $package->id ? 'selected' : '' }}>
+                                    <option value="{{ $package->id }}" {{ request('photo_package_id') == $package->id ? 'selected' : '' }}>
                                         {{ $package->name }} (Rp {{ number_format($package->price, 0, ',', '.') }})
                                     </option>
                                 @endforeach
@@ -95,15 +95,43 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-2">
                             <label for="photo_date" class="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Tanggal Sesi</label>
-                            <input type="date" name="photo_date" id="photo_date" value="{{ old('photo_date') }}" required
+                            <input type="date" name="photo_date" id="photo_date" value="{{ old('photo_date', request('photo_date')) }}" required
                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                                    class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all outline-none font-bold text-sm text-gray-700">
                         </div>
                         <div class="space-y-2">
                             <label for="photo_time" class="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Jam Sesi</label>
-                            <input type="time" name="photo_time" id="photo_time" value="{{ old('photo_time') }}" required
+                            <input type="time" name="photo_time" id="photo_time" value="{{ old('photo_time', request('photo_time')) }}" required
                                    class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all outline-none font-bold text-sm text-gray-700">
                         </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="payment_method" class="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Metode Pembayaran</label>
+                        <select name="payment_method" id="payment_method" required
+                                class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all outline-none font-bold text-sm text-gray-700 appearance-none">
+                            <option value="">— Pilih Metode Pembayaran —</option>
+                            <option value="bank_transfer" {{ old('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Transfer Bank</option>
+                            <option value="e_wallet" {{ old('payment_method') == 'e_wallet' ? 'selected' : '' }}>E-Wallet</option>
+                            <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>Tunai (Bayar di Studio)</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="payment_type" class="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Tipe Pembayaran</label>
+                        <select name="payment_type" id="payment_type" required
+                                class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all outline-none font-bold text-sm text-gray-700 appearance-none">
+                            <option value="">— Pilih Tipe Pembayaran —</option>
+                            <option value="dp" {{ old('payment_type') == 'dp' ? 'selected' : '' }}>DP (Down Payment)</option>
+                            <option value="lunas" {{ old('payment_type') == 'lunas' ? 'selected' : '' }}>Lunas</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="proof_of_payment" class="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Bukti Pembayaran (Opsional)</label>
+                        <input type="file" name="proof_of_payment" id="proof_of_payment" accept="image/*"
+                               class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all outline-none font-bold text-sm text-gray-700">
+                        <p class="text-xs text-gray-500 mt-1">Upload gambar bukti pembayaran (JPEG, PNG, JPG, GIF, max 2MB)</p>
                     </div>
 
                     <div class="space-y-2">

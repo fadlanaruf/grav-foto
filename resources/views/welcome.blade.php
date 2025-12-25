@@ -67,14 +67,24 @@
                     </div>
 
                     <div class="p-1">
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition group">
+                        <a href="{{ route('reservations.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition group">
+                            <div class="p-2 bg-gray-100 rounded-lg group-hover:bg-white transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                            </div>
+                            <span class="font-semibold">Riwayat Reservasi</span>
+                        </a>
+
+                        <a href="{{ route('profile.show') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition group">
                             <div class="p-2 bg-gray-100 rounded-lg group-hover:bg-white transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
                             </div>
-                            <span class="font-semibold">Lihat Profil</span>
+                            <span class="font-semibold">Profil Saya</span>
                         </a>
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -150,31 +160,44 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script>
+function handleReservation() {
+    @auth
+        window.location.href = '{{ route("reservations.create") }}';
+    @else
+        alert('Silakan login terlebih dahulu untuk melakukan reservasi.');
+        window.location.href = '{{ route("login") }}';
+    @endauth
+}
+</script>
+
 <section class="hero-background h-[600px] flex items-center pt-20">
     <div class="max-w-7xl mx-auto px-6 w-full text-center text-white">
         <h1 class="text-5xl md:text-5xl mb-4 tracking-tight" style="font-family: 'Rock Salt', cursive;">Come and Get Your Moments</h1>
         <p class="text-lg opacity-90 mb-12">Studio foto profesional dengan layanan premium dan hasil berkualitas tinggi.</p>
         
-        <div class="bg-white p-2 rounded-2xl shadow-2xl max-w-4xl mx-auto flex flex-col md:row text-gray-800">
+        <form action="{{ route('reservations.create') }}" method="GET" class="bg-white p-2 rounded-2xl shadow-2xl max-w-4xl mx-auto flex flex-col md:row text-gray-800">
             <div class="flex flex-col md:flex-row flex-1">
                 <div class="flex-1 px-6 py-3 text-left border-r border-gray-100">
                     <label class="text-[10px] uppercase tracking-wider font-bold text-gray-400">Layanan</label>
-                    <select class="w-full font-semibold bg-transparent focus:outline-none">
-                        <option>Pilih Layanan</option>
-                        <option>Wedding</option>
+                    <select name="photo_package_id" class="w-full font-semibold bg-transparent focus:outline-none">
+                        <option value="">Pilih Layanan</option>
+                        @foreach(\App\Models\PhotoPackage::where('is_active', true)->get() as $package)
+                            <option value="{{ $package->id }}">{{ $package->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="flex-1 px-6 py-3 text-left border-r border-gray-100">
                     <label class="text-[10px] uppercase tracking-wider font-bold text-gray-400">Pilih Tanggal</label>
-                    <input type="date" class="w-full font-semibold bg-transparent focus:outline-none" value="2025-12-22">
+                    <input type="date" name="photo_date" class="w-full font-semibold bg-transparent focus:outline-none" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
                 </div>
                 <div class="w-32 px-6 py-3 text-left">
                     <label class="text-[10px] uppercase tracking-wider font-bold text-gray-400">Waktu</label>
-                    <input type="time" class="w-full font-semibold bg-transparent focus:outline-none" value="10:00">
+                    <input type="time" name="photo_time" class="w-full font-semibold bg-transparent focus:outline-none">
                 </div>
             </div>
-            <button class="bg-indigo-600 text-white px-10 py-4 rounded-xl hover:bg-indigo-700 font-bold transition">Reservasi Sekarang</button>
-        </div>
+            <button onclick="handleReservation()" type="submit" class="bg-indigo-600 text-white px-10 py-4 rounded-xl hover:bg-indigo-700 font-bold transition">Reservasi Sekarang</button>
+        </form>
     </div>
 </section>
 
@@ -185,10 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <h2 class="text-3xl font-extrabold mb-4">Lacak Status Reservasi</h2>
         <p class="text-gray-500 mb-8">Masukkan ID Reservasi untuk melihat status pemesanan, jadwal, dan progres foto.</p>
-        <div class="flex gap-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-200">
-            <input type="text" placeholder="Contoh: GS-20251215-001" class="flex-1 px-4 focus:outline-none font-medium">
-            <button class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition">Cek Status</button>
-        </div>
+        <form action="{{ route('reservations.track') }}" method="POST" class="flex gap-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-200">
+            @csrf
+            <input type="text" name="code" placeholder="Contoh: GS-20251215-001" class="flex-1 px-4 focus:outline-none font-medium" required>
+            <button type="submit" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition">Cek Status</button>
+        </form>
         <div class="mt-4 flex justify-center gap-6 text-xs font-semibold text-gray-400 uppercase">
             <span class="flex items-center gap-1"><span class="w-2 h-2 bg-yellow-400 rounded-full"></span> Menunggu Konfirmasi</span>
             <span class="flex items-center gap-1"><span class="w-2 h-2 bg-blue-400 rounded-full"></span> Proses Edit</span>
@@ -279,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2 class="text-4xl font-extrabold mb-4">Siap Memulai Sesi Foto?</h2>
             <p class="opacity-80 mb-8 max-w-xl mx-auto">Reservasi sekarang dan dapatkan diskon 20% untuk pemesanan pertama Anda melalui website.</p>
             <div class="flex justify-center gap-4">
-                <button class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:bg-gray-100 transition">Reservasi Sekarang</button>
+                <button onclick="handleReservation()" class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:bg-gray-100 transition">Reservasi Sekarang</button>
                 <button class="bg-indigo-500 text-white px-8 py-4 rounded-2xl font-bold border border-white/20 hover:bg-indigo-400 transition">Hubungi Kami</button>
             </div>
         </div>

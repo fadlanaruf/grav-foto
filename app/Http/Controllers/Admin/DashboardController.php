@@ -17,7 +17,7 @@ class DashboardController extends Controller
             'total_reservations' => Reservation::count(),
             'pending_reservations' => Reservation::where('approved_at', null)->count(),
             'total_packages' => PhotoPackage::count(),
-            'total_users' => User::where('role', 'user')->count(),
+            'total_klien' => User::where('role', 'klien')->count(),
         ];
 
         $recentReservations = Reservation::with(['user', 'photoPackage', 'reservationStatus'])

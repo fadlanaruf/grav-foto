@@ -41,13 +41,15 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 // Reservation tracking (public)
 Route::post('/track-reservation', [ReservationController::class, 'track'])->name('reservations.track');
+Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
 
 // User routes (authenticated)
 Route::middleware(['auth'])->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
-    Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
     Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Admin Authentication (separate login)
@@ -78,4 +80,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Albums
     Route::resource('albums', AlbumController::class);
+    
+    // Users Management
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 });

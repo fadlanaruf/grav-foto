@@ -122,6 +122,20 @@
                         <div>
                             <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Biaya</p>
                             <h2 class="text-3xl font-black text-indigo-600">Rp {{ number_format($reservation->payment_amount, 0, ',', '.') }}</h2>
+                            <p class="text-sm text-gray-500 mt-2">Metode Pembayaran: 
+                                @if($reservation->payment_method == 'bank_transfer') Transfer Bank
+                                @elseif($reservation->payment_method == 'e_wallet') E-Wallet
+                                @elseif($reservation->payment_method == 'cash') Tunai (Bayar di Studio)
+                                @else - @endif
+                            </p>
+                            <p class="text-sm text-gray-500 mt-1">Tipe Pembayaran: 
+                                @if($reservation->payment_type == 'dp') DP (Down Payment)
+                                @elseif($reservation->payment_type == 'lunas') Lunas
+                                @else - @endif
+                            </p>
+                            @if($reservation->proof_of_payment)
+                                <p class="text-sm text-gray-500 mt-1">Bukti Pembayaran: <a href="{{ asset('storage/' . $reservation->proof_of_payment) }}" target="_blank" class="text-indigo-600 underline">Lihat Bukti</a></p>
+                            @endif
                         </div>
                         <div class="flex items-center gap-4 bg-gray-50 px-6 py-4 rounded-3xl border border-gray-100 w-full md:w-auto">
                             <div>

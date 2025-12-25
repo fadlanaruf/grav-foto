@@ -57,7 +57,7 @@
                                 <p class="text-base font-bold text-gray-900">{{ $reservation->name }}</p>
                             </div>
                             <div class="space-y-1">
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Akun User</p>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Akun Klien</p>
                                 <p class="text-base font-bold text-gray-900">{{ $reservation->user->name }}</p>
                             </div>
                             <div class="space-y-1 md:col-span-2">
@@ -180,7 +180,25 @@
                             </svg>
                         </div>
                         <h3 class="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 relative z-10">Total Tagihan</h3>
-                        <p class="text-3xl font-black text-indigo-600 mb-8 relative z-10">Rp {{ number_format($reservation->payment_amount, 0, ',', '.') }}</p>
+                        <p class="text-3xl font-black text-indigo-600 mb-4 relative z-10">Rp {{ number_format($reservation->payment_amount, 0, ',', '.') }}</p>
+                        
+                        @if($reservation->proof_of_payment)
+                            <div class="mb-6 relative z-10">
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Bukti Pembayaran</p>
+                                <a href="{{ asset('storage/' . $reservation->proof_of_payment) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-all font-bold text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    Lihat Bukti Pembayaran
+                                </a>
+                            </div>
+                        @else
+                            <div class="mb-6 relative z-10">
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Bukti Pembayaran</p>
+                                <p class="text-sm text-amber-600 font-medium">Belum ada bukti pembayaran diupload.</p>
+                            </div>
+                        @endif
                         
                         <form action="{{ route('admin.reservations.updatePayment', $reservation) }}" method="POST" class="relative z-10">
                             @csrf

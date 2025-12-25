@@ -24,6 +24,11 @@ class ReservationController extends Controller
     // Tampilkan form reservasi baru
     public function create()
     {
+        if (!Auth::check()) {
+            session()->put('intended', url()->current() . '?' . http_build_query(request()->query()));
+            return redirect()->route('login');
+        }
+
         $packages = PhotoPackage::where('is_active', true)->get();
         return view('reservations.create', compact('packages'));
     }
@@ -39,6 +44,9 @@ class ReservationController extends Controller
             'number_of_people' => 'required|integer|min:1',
             'photo_date' => 'required|date|after:today',
             'photo_time' => 'required',
+            'payment_method' => 'required|in:bank_transfer,cash,e_wallet',
+            'payment_type' => 'required|in:dp,lunas',
+            'proof_of_payment' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'notes' => 'nullable|string',
         ]);
 
@@ -48,10 +56,19 @@ class ReservationController extends Controller
         // Ambil status pertama (Menunggu Difoto)
         $firstStatus = ReservationStatus::orderBy('order')->first();
 
+        // Handle proof of payment upload
+        $proofPath = null;
+        if ($request->hasFile('proof_of_payment')) {
+            $proofPath = $request->file('proof_of_payment')->store('proofs', 'public');
+        }
+
         $reservation = Reservation::create([
             'reservation_code' => Reservation::generateReservationCode(),
             'user_id' => Auth::id(),
             'photo_package_id' => $validated['photo_package_id'],
+            'payment_method' => $validated['payment_method'],
+            'payment_type' => $validated['payment_type'],
+            'proof_of_payment' => $proofPath,
             'name' => $validated['name'],
             'address' => $validated['address'],
             'phone' => $validated['phone'],
