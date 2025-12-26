@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravity Photography</title>
+    <title>Gravity Photography - Reservasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
@@ -20,10 +20,26 @@
         /* Gallery Masonry Grid */
         .gallery-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            grid-template-columns: 1fr;
+            gap: 24px;
         }
-        .gallery-item-tall { grid-row: span 2; }
+        
+        .gallery-item {
+            height: 280px;
+        }
+
+        .gallery-item-tall {
+            height: 450px;
+        }
+
+        @media (min-width: 768px) {
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .gallery-item { height: 20rem; }
+            .gallery-item-tall { grid-row: span 2; height: auto; }
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -49,7 +65,7 @@
                         <option value="personal">Personal</option>
                         <option value="keluarga">Keluarga</option>
                         <option value="maternity">Maternity</option>
-                        <option value="prewedding">Pre-Wedding</option>
+                        <option value="wedding">Wedding</option>
                     </select>
                 </div>
                 <div class="flex-1 px-6 py-3 text-left border-r border-gray-100">
@@ -61,7 +77,7 @@
                     <input type="time" name="photo_time" class="w-full font-semibold bg-transparent focus:outline-none">
                 </div>
             </div>
-            <button onclick="handleReservation()" type="submit" class="bg-indigo-600 text-white px-10 py-4 rounded-xl hover:bg-indigo-700 font-bold transition">Reservasi Sekarang</button>
+            <button type="submit" class="bg-indigo-600 text-white px-10 py-4 rounded-xl hover:bg-indigo-700 font-bold transition">Reservasi Sekarang</button>
         </form>
     </div>
 </section>
@@ -75,7 +91,7 @@
         <p class="text-gray-500 mb-8">Masukkan ID Reservasi untuk melihat status pemesanan, jadwal, dan progres foto.</p>
         <form action="{{ route('reservations.track') }}" method="POST" class="flex gap-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-200">
             @csrf
-            <input type="text" name="code" placeholder="Contoh: GS-20251215-001" class="flex-1 px-4 focus:outline-none font-medium" required>
+            <input type="text" name="code" placeholder="Masukkan disini..." class="flex-1 px-4 focus:outline-none font-medium" required>
             <button type="submit" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition">Cek Status</button>
         </form>
         <div class="mt-4 flex justify-center gap-6 text-xs font-semibold text-gray-400 uppercase">
@@ -96,13 +112,13 @@
         <div class="gallery-item-tall bg-gray-200 rounded-3xl overflow-hidden shadow-lg">
             <img src="https://warnaindonesiaphoto.com/wp-content/uploads/2021/07/PAKET-PREWEDDING-MURAH-2.jpg" class="w-full h-full object-cover">
         </div>
-        <div class="bg-gray-200 rounded-3xl overflow-hidden shadow-lg h-80">
+        <div class="gallery-item bg-gray-200 rounded-3xl overflow-hidden shadow-lg">
             <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
         </div>
-        <div class="bg-gray-200 rounded-3xl overflow-hidden shadow-lg h-80">
+        <div class="gallery-item bg-gray-200 rounded-3xl overflow-hidden shadow-lg">
             <img src="https://foto.co.id/wp-content/uploads/2013/09/IMG_7992.jpg" class="w-full h-full object-cover">
         </div>
-        <div class="bg-gray-200 rounded-3xl overflow-hidden shadow-lg h-80">
+        <div class="gallery-item bg-gray-200 rounded-3xl overflow-hidden shadow-lg">
             <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
         </div>
         <div class="gallery-item-tall bg-gray-200 rounded-3xl overflow-hidden shadow-lg">
@@ -203,10 +219,14 @@
     <div class="bg-indigo-600 rounded-[40px] p-12 text-center text-white relative overflow-hidden">
         <div class="relative z-10">
             <h2 class="text-4xl font-extrabold mb-4">Siap Memulai Sesi Foto?</h2>
-            <p class="opacity-80 mb-8 max-w-xl mx-auto">Reservasi sekarang dan dapatkan diskon 20% untuk pemesanan pertama Anda melalui website.</p>
+            <p class="opacity-80 mb-8 max-w-xl mx-auto">Reservasi sekarang dan dapatkan foto pertama anda.</p>
             <div class="flex justify-center gap-4">
                 <button onclick="handleReservation()" class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:bg-gray-100 transition">Reservasi Sekarang</button>
-                <button class="bg-indigo-500 text-white px-8 py-4 rounded-2xl font-bold border border-white/20 hover:bg-indigo-400 transition">Hubungi Kami</button>
+                <a href="https://wa.me/6285265421321" target="_blank" class="inline-block">
+    <button class="bg-indigo-500 text-white px-8 py-4 rounded-2xl font-bold border border-white/20 hover:bg-indigo-400 transition">
+        Hubungi Kami
+    </button>
+</a>
             </div>
         </div>
         <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full"></div>
@@ -250,11 +270,11 @@
             <ul class="space-y-4 text-sm">
                 <li class="flex items-center gap-3">
                     <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                    +62 821-2222-3333
+                    +62 852-6542-1321
                 </li>
                 <li class="flex items-center gap-3">
                     <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    halo@gravitystudio.com
+                    gravityphotopku@gmail.com
                 </li>
                 <li class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -264,7 +284,7 @@
         </div>
     </div>
     <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-gray-800 flex flex-col md:row justify-between items-center text-xs">
-        <p>&copy; 2025 Gravity Photography. Semua Hak Dilindungi.</p>
+        <p>&copy; 2026 Gravity Photography. Semua Hak Dilindungi.</p>
         <div class="flex gap-6 mt-4 md:mt-0">
             <a href="https://www.instagram.com/gravity_photo/" class="hover:text-white">Instagram</a>
         </div>

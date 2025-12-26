@@ -86,6 +86,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
     Route::post('/reservations/{reservation}/payment', [AdminReservationController::class, 'updatePayment'])->name('reservations.updatePayment');
     Route::post('/reservations/{reservation}/notes', [AdminReservationController::class, 'updateNotes'])->name('reservations.updateNotes');
+    Route::delete('/reservations/{reservation}', [AdminReservationController::class, 'destroy'])->name('reservations.destroy');
     
     // Albums
     Route::resource('albums', AlbumController::class);

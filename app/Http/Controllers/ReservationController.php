@@ -30,7 +30,12 @@ class ReservationController extends Controller
         }
 
         $packages = PhotoPackage::where('is_active', true)->get();
-        return view('reservations.create', compact('packages'));
+
+        $paymentMethods = [
+            'bank_transfer' => 'Transfer Bank BNI (No. Rek: 1134620469)',
+            'cash' => 'Tunai',
+        ];
+        return view('reservations.create', compact('packages', 'paymentMethods'));
     }
 
     // Store reservasi
@@ -43,7 +48,7 @@ class ReservationController extends Controller
             'number_of_people' => 'required|integer|min:1',
             'photo_date' => 'required|date|after:today',
             'photo_time' => 'required',
-            'payment_method' => 'required|in:bank_transfer,cash,e_wallet',
+            'payment_method' => 'required|in:bank_transfer,cash',
             'payment_type' => 'required|in:dp,lunas',
             'proof_of_payment' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'notes' => 'nullable|string',

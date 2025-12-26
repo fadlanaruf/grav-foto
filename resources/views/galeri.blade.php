@@ -422,22 +422,54 @@
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Logika Filter Kategori (Tetap seperti sebelumnya)
+    // 1. Logika Filter Kategori & Mobile Filter
     const categoryLinks = document.querySelectorAll('.category-link');
+    const mobileFilterPanel = document.getElementById('mobile-filter-panel');
+    const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+    const closeMobileFilter = document.getElementById('close-mobile-filter');
+
+    // Toggle Mobile Filter Panel
+    if (mobileFilterToggle && mobileFilterPanel) {
+        mobileFilterToggle.addEventListener('click', () => {
+            mobileFilterPanel.classList.remove('-translate-y-full');
+        });
+    }
+
+    if (closeMobileFilter && mobileFilterPanel) {
+        closeMobileFilter.addEventListener('click', () => {
+            mobileFilterPanel.classList.add('-translate-y-full');
+        });
+    }
+
+    // Filter Logic
     categoryLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const category = this.getAttribute('data-category');
+            
+            // Filter Gallery Items
             document.querySelectorAll('.gallery-item').forEach(item => {
                 const itemCat = item.getAttribute('data-category');
                 item.style.display = (category === 'all' || itemCat === category) ? '' : 'none';
             });
+
+            // Update Active State (Sync Desktop & Mobile)
             categoryLinks.forEach(l => {
-                l.classList.remove('bg-indigo-600', 'text-white');
+                // Reset to inactive state
+                l.classList.remove('bg-indigo-600', 'text-white', 'shadow-xl', 'shadow-indigo-100');
                 l.classList.add('text-gray-500', 'hover:text-indigo-600', 'hover:bg-white');
+                
+                // Set active state if matches category
+                if (l.getAttribute('data-category') === category) {
+                    l.classList.remove('text-gray-500', 'hover:text-indigo-600', 'hover:bg-white');
+                    l.classList.add('bg-indigo-600', 'text-white', 'shadow-xl', 'shadow-indigo-100');
+                }
             });
-            this.classList.replace('text-gray-500', 'bg-indigo-600');
-            this.classList.add('text-white');
+
+            // Close mobile filter if open
+            if (mobileFilterPanel && !mobileFilterPanel.classList.contains('-translate-y-full')) {
+                mobileFilterPanel.classList.add('-translate-y-full');
+            }
         });
     });
 

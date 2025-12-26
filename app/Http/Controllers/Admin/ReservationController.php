@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\ReservationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ReservationController extends Controller
 {
@@ -109,5 +110,17 @@ class ReservationController extends Controller
         ]);
 
         return back()->with('success', 'Catatan admin berhasil diperbarui.');
+    }
+
+    // Hapus reservasi
+    public function destroy(Reservation $reservation)
+    {
+        if ($reservation->proof_of_payment) {
+            Storage::disk('public')->delete($reservation->proof_of_payment);
+        }
+
+        $reservation->delete();
+
+        return back()->with('success', 'Data reservasi berhasil dihapus.');
     }
 }
